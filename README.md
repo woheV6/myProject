@@ -7,5 +7,5 @@ git commoit -am '.'
 git remote add origin git@github.com:woheV6/myProject.git
 git push -u origin master
 git pull --rebase origin master
-git push
+git push 
 ```
