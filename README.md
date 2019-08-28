@@ -22,4 +22,4 @@ On the GitHub site Click “Settings” > Click “SSH and GPG Keys” > Click �
 ##js注意事项
 - 总是使用hasOwnProperty来取属性的时候,避免原型对象扩展带来的困扰;
 ## 相关好文
-- http://bonsaiden.github.io/JavaScript-Garden/zh/
+- js秘密花园: http://bonsaiden.github.io/JavaScript-Garden/zh/
