@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>history-sap模式</title>
+</head>
+<body>
+    <a href='/page1'>page1</a>
+    <a href='/page2'>page2</a>
+    <a href='/page3'>page3</a>
+    <div id='container'></div>
+</body>
+<script>
+    class Router{
+        constructor(){
+            this.routes = {}
+            this.listenPopState()
+            this.listenLink()
+        }
+        listenPopState(){
+            window.addEventListener('popstate',e=>{
+                const state=e.state||{}
+                const path=state.path||''
+                this.handler(path)
+            })
+        }
+        listenLink(){
+            window.addEventListener('click',e=>{
+                let ev= e.target
+                if(ev.tagName==='A'&&ev.getAttribute('href')){
+                    e.preventDefault()
+                    this.urlRefresh(ev.getAttribute('href'))
+                   
+                }
+            })
+        }
+        load(){
+            const path = location.pathname
+        }
+        register(path,cb){
+            this.routes[path]=cb
+        }
+        index(cb){
+            this.routes['/']=cb
+        }
+        notFound(cd){
+            this.routes['notFound']=cd
+        }
+        error(cb){
+            this.routes['error']=cb
+        }
+        urlRefresh(path){
+            history.pushState({path},null,path)
+            this.handler(path)
+        }
+        handler(path){
+            let cb;
+            cb= this.routes[path]
+            cb.call(this)
+        }
+    }
+    let router=new Router()
+    router.load()
+    const container=document.getElementById('container')
+    router.index=function(){
+        container.innerHTML='首页'
+    }
+    router.notFound(function(){
+        container.innerHTML='404page'
+    })
+    router.register('/page1',function(){
+        container.innerHTML='page1'
+    })
+    router.register('/page2',function(){
+        container.innerHTML='page2'
+    })
+    router.register('/page3',function(){
+        container.innerHTML='page3'
+    })
+</script>
+</html>

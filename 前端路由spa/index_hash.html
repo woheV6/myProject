@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>如何实现前端路由</title>
+</head>
+<body>
+    <a href='#/page1'>page1</a>
+    <a href='#/page2'>page2</a>
+    <a href='#/page3'>page3</a>
+    <div id='container'></div>
+</body>
+<script>
+    function Router(){
+        this.routes={}
+        // 监听到路由变化,然后执行相应对路由函数
+        window.addEventListener('hashchange',this.reload.bind(this))
+    }
+        // 首页的回调
+    Router.prototype.index=function(callback){
+        this.routes['index']=callback
+    }
+    // 其他页面注册
+    Router.prototype.register=function(hash,cb){
+        this.routes[hash]=cb
+    }
+    Router.prototype.reload=function(){
+        let cb;
+        let hash=location.hash.slice(1)
+        !hash?cb=this.routes.index:cb=this.routes[hash]
+        cb.call(this)
+    }
+    let router=new Router()
+    const container=document.getElementById('container')
+    router.index=function(){
+        container.innerHTML='首页'
+    }
+    router.register('index',function(){
+        container.innerHTML='首页'
+    })
+    router.register('/page1',function(){
+        container.innerHTML='page1'
+    })
+    router.register('/page2',function(){
+        container.innerHTML='page2'
+    })
+    router.register('/page3',function(){
+        container.innerHTML='page3'
+    })
+    router.reload()
+</script>
+</html>
